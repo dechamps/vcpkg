@@ -1,15 +1,29 @@
 include(vcpkg_common_functions)
 
+set(PORTAUDIO_GIT_REF 0cdb346fdca725cfc98da5cbe2d079096f91b624)
+
 vcpkg_from_git(
     OUT_SOURCE_PATH SOURCE_PATH
     URL https://git.assembla.com/portaudio.git
-    REF 0cdb346fdca725cfc98da5cbe2d079096f91b624
+    REF ${PORTAUDIO_GIT_REF}
     SHA512 2d984f5fca49a6c8477fa5216d0be9e3ef57d8943be4c5733ec288c31b3da645e34c160e5ed1dcc8eb5607b94c5b015b81a3551e684d6667e00c00c699ad524a
     PATCHES
         cmakelists-install.patch
         find_dsound.patch
         crt_linkage_build_config.patch
         pa_win_waveformat.patch
+)
+
+vcpkg_acquire_msys(MSYS_ROOT)
+set(BASH ${MSYS_ROOT}/usr/bin/bash.exe)
+
+# Note: we can't use the original update_gitrevision.sh script from PortAudio
+# because it needs to run inside a PortAudio git working copy, which is  not the
+# environment we're in.
+vcpkg_execute_required_process(
+  COMMAND ${BASH} --noprofile --norc -c "echo '#define PA_GIT_REVISION ${PORTAUDIO_GIT_REF}-vcpkg' > src/common/pa_gitrevision.h"
+  WORKING_DIRECTORY "${SOURCE_PATH}"
+  LOGNAME update_gitrevision
 )
 
 # NOTE: the ASIO backend will be built automatically if the ASIO-SDK is provided
