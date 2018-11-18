@@ -1,11 +1,25 @@
+From a552636034dc325ee335b65208e70f1731111335 Mon Sep 17 00:00:00 2001
+From: Etienne Dechamps <etienne@edechamps.fr>
+Date: Sun, 18 Nov 2018 16:03:58 +0000
+Subject: [PATCH] cmakelists-install.patch report
+
+---
+ CMakeLists.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0b1832f..b36f31d 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -372,6 +372,8 @@
+@@ -417,6 +417,8 @@ IF(WIN32 AND MSVC)
+       SET_TARGET_PROPERTIES(portaudio_static PROPERTIES OUTPUT_NAME portaudio)
+     ENDIF()
    ENDIF()
-   SET_TARGET_PROPERTIES(portaudio PROPERTIES OUTPUT_NAME portaudio_${TARGET_POSTFIX} FOLDER "Portaudio")
-   SET_TARGET_PROPERTIES(portaudio_static PROPERTIES OUTPUT_NAME portaudio_static_${TARGET_POSTFIX} FOLDER "Portaudio")
 +  INSTALL(FILES ${PA_PUBLIC_INCLUDES} DESTINATION include)
 +  INSTALL(TARGETS portaudio portaudio_static RUNTIME DESTINATION bin ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
  ELSE()
    IF(APPLE AND CMAKE_VERSION VERSION_GREATER 3.4.2)
      OPTION(PA_OUTPUT_OSX_FRAMEWORK "Generate an OS X framework instead of the simple library" OFF)
+-- 
+2.14.1.windows.1
+

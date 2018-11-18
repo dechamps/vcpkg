@@ -1,17 +1,13 @@
 include(vcpkg_common_functions)
 
-vcpkg_download_distfile(ARCHIVE
-    URLS "http://www.portaudio.com/archives/pa_stable_v190600_20161030.tgz"
-    FILENAME "pa_stable_v190600_20161030.tgz"
-    SHA512 7ec692cbd8c23878b029fad9d9fd63a021f57e60c4921f602995a2fca070c29f17a280c7f2da5966c4aad29d28434538452f4c822eacf3a60af59a6dc8e9704c
-)
-vcpkg_extract_source_archive_ex(
+vcpkg_from_git(
     OUT_SOURCE_PATH SOURCE_PATH
-    ARCHIVE ${ARCHIVE}
+    URL https://git.assembla.com/portaudio.git
+    REF 0cdb346fdca725cfc98da5cbe2d079096f91b624
+    SHA512 2d984f5fca49a6c8477fa5216d0be9e3ef57d8943be4c5733ec288c31b3da645e34c160e5ed1dcc8eb5607b94c5b015b81a3551e684d6667e00c00c699ad524a
     PATCHES
         cmakelists-install.patch
         find_dsound.patch
-        wasapi_support.patch
         crt_linkage_build_config.patch
         pa_win_waveformat.patch
 )
@@ -55,4 +51,9 @@ vcpkg_copy_pdbs()
 file(COPY ${SOURCE_PATH}/LICENSE.txt DESTINATION ${CURRENT_PACKAGES_DIR}/share/portaudio)
 file(RENAME ${CURRENT_PACKAGES_DIR}/share/portaudio/LICENSE.txt ${CURRENT_PACKAGES_DIR}/share/portaudio/copyright)
 
+file(RENAME ${CURRENT_PACKAGES_DIR}/lib/cmake/portaudio ${CURRENT_PACKAGES_DIR}/share/portaudio/cmake)
+
+file(REMOVE_RECURSE ${CURRENT_PACKAGES_DIR}/lib/cmake)
 file(REMOVE_RECURSE ${CURRENT_PACKAGES_DIR}/debug/include)
+file(REMOVE_RECURSE ${CURRENT_PACKAGES_DIR}/debug/share)
+file(REMOVE_RECURSE ${CURRENT_PACKAGES_DIR}/debug/lib/cmake)
